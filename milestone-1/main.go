@@ -19,12 +19,18 @@ var oauthConf = &oauth2.Config{
 	RedirectURL: "http://localhost:8080/github/callback",
 }
 
+func goDotEnvVar(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
+}
+
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	oauthConf.ClientID = goDotEnvVar("GITHUB_CLIENT_ID")
+	oauthConf.ClientSecret = goDotEnvVar("GITHUB_CLIENT_SECRET")
 
 	log.Printf("Loaded Client ID: %s", oauthConf.ClientID)
 
