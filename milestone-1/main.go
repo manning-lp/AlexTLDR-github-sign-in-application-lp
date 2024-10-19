@@ -1,23 +1,28 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 )
 
-func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
-	}
-}
+var sessionsStore = make(map[string]userData)
 
 var oauthConf = &oauth2.Config{
 	ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
 	ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
-	Scopes:       []string{"user:email"},
+	Scopes:       []string{"repo", "user"},
 	Endpoint:     github.Endpoint,
+	RedirectURL:  "http://localhost:8080/github/callback",
+}
+
+func main() {
+	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/github/callback", githubCallbackHandler)
+
+	fmt.Println("Server is running on http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }
