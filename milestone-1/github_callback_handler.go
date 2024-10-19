@@ -51,8 +51,8 @@ func githubCallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Store user data in the session store
 	sessionsStore[sessionID] = userData{
-		AccessToken: token.AccessToken,
-		Username:    *user.Login,
+		Login:       *user.Login,
+		accessToken: token.AccessToken,
 	}
 
 	// Set the Session cookie

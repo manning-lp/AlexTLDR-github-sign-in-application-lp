@@ -15,7 +15,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		sessionID := cookie.Value
 		if userData, ok := sessionsStore[sessionID]; ok {
-			fmt.Fprintf(w, "Successfully authorized to access GitHub on your behalf: %s", userData.Username)
+			fmt.Fprintf(w, "Successfully authorized to access GitHub on your behalf: %s", userData.Login)
 			return
 		}
 	}
